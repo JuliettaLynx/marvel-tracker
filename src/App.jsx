@@ -83,8 +83,7 @@ export default function App() {
     )
 
     const prepItems = items.filter(i => i.isPrep)
-    const prepMovies = prepItems.filter(i => i.type === 'movie')
-    const prepMoviesWatched = prepMovies.filter(i => progressOf(i, state[i.id]).watched).length
+    const prepWatched = prepItems.filter(i => progressOf(i, state[i.id]).watched).length
     const prepHours = prepItems.reduce((a, i) => a + i.hours, 0)
     const prepHoursWatched = prepItems.reduce(
       (a, i) => a + progressOf(i, state[i.id]).hoursWatched, 0
@@ -99,7 +98,7 @@ export default function App() {
 
     return {
       mainMovies, mainWatched, mainHours, mainHoursWatched,
-      prepMovies, prepMoviesWatched, prepHours, prepHoursWatched,
+      prepItems, prepWatched, prepHours, prepHoursWatched,
       totalItems, totalWatched, totalHours, totalHoursWatched,
     }
   }, [state])

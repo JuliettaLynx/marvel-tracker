@@ -15,8 +15,8 @@ export default function SummaryCards({ stats }) {
       />
       <SummaryCard
         title={`🎯 Подготовка к «${prepLabel}»`}
-        value={stats.prepMoviesWatched}
-        max={stats.prepMovies.length}
+        value={stats.prepWatched}
+        max={stats.prepItems.length}
         hoursWatched={stats.prepHoursWatched}
         hoursTotal={stats.prepHours}
         color="#f5a623"

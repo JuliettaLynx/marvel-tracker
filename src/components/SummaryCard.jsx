@@ -18,7 +18,7 @@ export default function SummaryCard({
       <div className="mb-2.5 text-2xl font-bold">
         {value} / {max}
       </div>
-      <ProgressBar value={value} max={max} color={color} />
+      <ProgressBar value={hoursWatched} max={hoursTotal} color={color} />
       <div className="mt-2 text-[13px] text-[#98a0ad]">
         {subPrefix ? `${subPrefix} ` : ''}⏱ {hoursWatched.toFixed(1)} /{' '}
         {hoursTotal.toFixed(1)} ч
