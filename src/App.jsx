@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { items, GROUP_ORDER, MAIN_PHASES, groupOf } from './data/marvelData'
+import { items, GROUP_ORDER, PHASE_GROUP_ORDER, SEASON_PHASE_GROUP_ORDER, MAIN_PHASES, groupOf } from './data/marvelData'
 import { progressOf } from './utils/progress'
 import { useProgress } from './hooks/useProgress'
 import { useLocalStorage } from './hooks/useLocalStorage'
@@ -9,6 +9,32 @@ import Controls from './components/Controls'
 import GroupSection from './components/GroupSection'
 
 const EXPANDED_KEY = 'marvel-tracker-expanded'
+
+/** Разбивает сериал на виртуальные элементы по сезонам */
+function expandSeasons(item) {
+  if (item.type !== 'series') return [item]
+  return item.seasons.map(season => ({
+    ...item,
+    id: `${item.id}__${season.name}`,
+    title: `${item.title}, ${season.name}`,
+    year: season.year,
+    type: 'series',
+    seasons: [season],
+    episodes: season.episodes,
+    hours: season.hours,
+    seasonPhase: season.phase || null,
+    parentSeriesId: item.id,
+    seasonName: season.name,
+  }))
+}
+
+/** Определяет группу для виртуального сезона или фильма */
+function groupOfPhaseMode(item) {
+  if (item.seasonPhase) return item.seasonPhase
+  if (item.type === 'series') return 'Сериалы вне фаз'
+  if (item.phase) return item.phase
+  return 'Фильмы вне фаз'
+}
 
 export default function App() {
   const [state, setState] = useProgress()
@@ -23,11 +49,12 @@ export default function App() {
   const toggleItem = (item) =>
     setState(s => {
       if (item.type === 'series') {
-        const p = progressOf(item, s[item.id])
-        if (p.watched) return { ...s, [item.id]: { ...s[item.id], seasons: {} } }
-        const seasons = {}
+        const stateId = item.parentSeriesId || item.id
+        const p = progressOf(item, s[stateId])
+        if (p.watched) return { ...s, [stateId]: { ...s[stateId], seasons: {} } }
+        const seasons = { ...(s[stateId]?.seasons || {}) }
         for (const season of item.seasons) seasons[season.name] = season.episodes
-        return { ...s, [item.id]: { ...s[item.id], seasons } }
+        return { ...s, [stateId]: { ...s[stateId], seasons } }
       }
       return { ...s, [item.id]: { ...s[item.id], watched: !s[item.id]?.watched } }
     })
@@ -79,7 +106,73 @@ export default function App() {
 
   /* --- groups --- */
   const groups = useMemo(() => {
-    const filtered = items.filter(i => {
+    let source = items
+
+    // Режимы с разбивкой сезонов
+    if (groupMode === 'byPhase' || groupMode === 'seriesByPhase') {
+      let filtered = source.filter(i => {
+        if (groupMode === 'seriesByPhase' && i.type !== 'series') return false
+        if (groupMode === 'byPhase') {
+          if (typeFilter === 'movie' && i.type !== 'movie') return false
+          if (typeFilter === 'series' && i.type !== 'series') return false
+        }
+        if (filter === 'prep') return i.isPrep
+        // Для сериалов watched/unwatched фильтруется после разбивки на сезоны
+        if (i.type === 'series') return true
+        if (filter === 'watched') return progressOf(i, state[i.id]).watched
+        if (filter === 'unwatched') return !progressOf(i, state[i.id]).watched
+        return true
+      })
+
+      // Разбиваем сериалы на сезоны
+      const expanded = filtered.flatMap(i => expandSeasons(i))
+
+      // Фильтруем виртуальные сезоны по статусу просмотра (для filter watched/unwatched)
+      const afterFilter = expanded.filter(i => {
+        if (filter === 'all' || filter === 'prep') return true
+        const p = progressOf(i, state[i.parentSeriesId || i.id])
+        if (filter === 'watched') return p.watched
+        if (filter === 'unwatched') return !p.watched
+        return true
+      })
+
+      const sorter = (a, b) =>
+        sortBy === 'year'
+          ? (a.year || 9999) - (b.year || 9999)
+          : a.title.localeCompare(b.title, 'ru')
+
+      const buildMeta = (list) => ({
+        list,
+        hoursTotal: list.reduce((a, i) => a + i.hours, 0),
+        hoursWatched: list.reduce((a, i) => a + progressOf(i, state[i.parentSeriesId || i.id]).hoursWatched, 0),
+        doneCount: list.filter(i => progressOf(i, state[i.parentSeriesId || i.id]).watched).length,
+      })
+
+      const map = new Map()
+      for (const it of afterFilter) {
+        const k = groupOfPhaseMode(it)
+        if (!map.has(k)) map.set(k, [])
+        map.get(k).push(it)
+      }
+
+      const order = groupMode === 'seriesByPhase' ? SEASON_PHASE_GROUP_ORDER : PHASE_GROUP_ORDER
+
+      const sortedKeys = [...map.keys()].sort((a, b) => {
+        const ia = order.indexOf(a), ib = order.indexOf(b)
+        if (ia !== -1 && ib !== -1) return ia - ib
+        if (ia !== -1) return -1
+        if (ib !== -1) return 1
+        return a.localeCompare(b, 'ru')
+      })
+
+      return sortedKeys.map(k => ({
+        key: k,
+        collapsible: true,
+        ...buildMeta(map.get(k).slice().sort(sorter)),
+      }))
+    }
+
+    const filtered = source.filter(i => {
       if (typeFilter === 'movie' && i.type !== 'movie') return false
       if (typeFilter === 'series' && i.type !== 'series') return false
 

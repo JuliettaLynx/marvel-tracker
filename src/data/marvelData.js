@@ -31,7 +31,57 @@ export const GROUP_ORDER = [
     'Фаза 5', 'Фаза 6', 'Фаза 7',
 ]
 
+export const PHASE_GROUP_ORDER = [
+    'Фаза 1', 'Фаза 2', 'Фаза 3', 'Фаза 4',
+    'Фаза 5', 'Фаза 6',
+    'Фильмы вне фаз', 'Сериалы вне фаз',
+]
+
+export const SEASON_PHASE_GROUP_ORDER = [
+    'Фаза 1', 'Фаза 2', 'Фаза 3', 'Фаза 4',
+    'Фаза 5', 'Фаза 6',
+    'Сериалы вне фаз',
+]
+
 export const MAIN_PHASES = ['Фаза 1', 'Фаза 2', 'Фаза 3', 'Фаза 4', 'Фаза 5', 'Фаза 6']
+
+/** Фаза для каждого сезона сериала (ключ: `${seriesId}__${seasonName}`) */
+export const SEASON_PHASE = {
+    'dd__S1': 'Фаза 2',
+    'dd__S2': 'Фаза 3',
+    'dd__S3': 'Фаза 3',
+    'jj__S1': 'Фаза 2',
+    'jj__S2': 'Фаза 3',
+    'jj__S3': 'Фаза 3',
+    'lc__S1': 'Фаза 3',
+    'lc__S2': 'Фаза 3',
+    'if__S1': 'Фаза 3',
+    'if__S2': 'Фаза 3',
+    'def__S1': 'Фаза 3',
+    'pun__S1': 'Фаза 3',
+    'pun__S2': 'Фаза 3',
+    'wv__S1': 'Фаза 4',
+    'tfatws__S1': 'Фаза 4',
+    'loki__S1': 'Фаза 4',
+    'loki__S2': 'Фаза 5',
+    'whatif__S1': 'Фаза 4',
+    'whatif__S2': 'Фаза 5',
+    'whatif__S3': 'Фаза 5',
+    'hawk__S1': 'Фаза 4',
+    'mk__S1': 'Фаза 4',
+    'msm__S1': 'Фаза 4',
+    'sheh__S1': 'Фаза 4',
+    'groot__S1': 'Фаза 4',
+    'groot__S2': 'Фаза 5',
+    'si__S1': 'Фаза 5',
+    'echo__S1': 'Фаза 5',
+    'agatha__S1': 'Фаза 5',
+    'ddba__S1': 'Фаза 5',
+    'ddba__S2': 'Фаза 6',
+    'ihrt__S1': 'Фаза 5',
+    'wonderman__S1': 'Фаза 6',
+    'vision__S1': 'Фаза 6',
+}
 
 /** Определяет группу для элемента: сериал / фаза / вне фаз. */
 export function groupOf(item) {
@@ -40,76 +90,89 @@ export function groupOf(item) {
     return 'Фильмы вне фаз'
 }
 
+/** Определяет группу для элемента в режиме «По фазам» (с учётом сезона). */
+export function groupOfByPhase(item, seasonName) {
+    if (item.type === 'series') {
+        const key = `${item.id}__${seasonName}`
+        return SEASON_PHASE[key] || 'Сериалы вне фаз'
+    }
+    if (item.phase) return item.phase
+    return 'Фильмы вне фаз'
+}
+
 /* ---------- Данные ---------- */
 export const items = [
     /* ============ СЕРИАЛЫ (все в одной группе) ============ */
     series('dd', 'Сорвиголова', 2015, [
-        { name: 'S1', year: 2015, episodes: 13, episodeMinutes: 55 },
-        { name: 'S2', year: 2016, episodes: 13, episodeMinutes: 55 },
-        { name: 'S3', year: 2018, episodes: 13, episodeMinutes: 55 },
+        { name: 'S1', year: 2015, episodes: 13, episodeMinutes: 54, phase: 'Фаза 2' },
+        { name: 'S2', year: 2016, episodes: 13, episodeMinutes: 54, phase: 'Фаза 3' },
+        { name: 'S3', year: 2018, episodes: 13, episodeMinutes: 52, phase: 'Фаза 3' },
     ]),
 
     series('jj', 'Джессика Джонс', 2015, [
-        { name: 'S1', year: 2015, episodes: 13, episodeMinutes: 50 },
-        { name: 'S2', year: 2018, episodes: 13, episodeMinutes: 50 },
-        { name: 'S3', year: 2019, episodes: 13, episodeMinutes: 50 },
+        { name: 'S1', year: 2015, episodes: 13, episodeMinutes: 50, phase: 'Фаза 2' },
+        { name: 'S2', year: 2018, episodes: 13, episodeMinutes: 50, phase: 'Фаза 3' },
+        { name: 'S3', year: 2019, episodes: 13, episodeMinutes: 50, phase: 'Фаза 3' },
     ]),
 
     series('lc', 'Люк Кейдж', 2016, [
-        { name: 'S1', year: 2016, episodes: 13, episodeMinutes: 50 },
-        { name: 'S2', year: 2018, episodes: 13, episodeMinutes: 50 },
+        { name: 'S1', year: 2016, episodes: 13, episodeMinutes: 50, phase: 'Фаза 3' },
+        { name: 'S2', year: 2018, episodes: 13, episodeMinutes: 50, phase: 'Фаза 3' },
     ]),
 
     series('if', 'Железный кулак', 2017, [
-        { name: 'S1', year: 2017, episodes: 13, episodeMinutes: 50 },
-        { name: 'S2', year: 2018, episodes: 10, episodeMinutes: 50 },
+        { name: 'S1', year: 2017, episodes: 13, episodeMinutes: 50, phase: 'Фаза 3' },
+        { name: 'S2', year: 2018, episodes: 10, episodeMinutes: 50, phase: 'Фаза 3' },
     ]),
 
     series('def', 'Защитники', 2017, [
-        { name: 'S1', year: 2017, episodes: 8, episodeMinutes: 50 },
+        { name: 'S1', year: 2017, episodes: 8, episodeMinutes: 50, phase: 'Фаза 3' },
     ]),
 
     series('pun', 'Каратель', 2017, [
-        { name: 'S1', year: 2017, episodes: 13, episodeMinutes: 55 },
-        { name: 'S2', year: 2019, episodes: 13, episodeMinutes: 55 },
+        { name: 'S1', year: 2017, episodes: 13, episodeMinutes: 55, phase: 'Фаза 3' },
+        { name: 'S2', year: 2019, episodes: 13, episodeMinutes: 55, phase: 'Фаза 3' },
     ]),
 
-    series('wv', 'ВандаВижн', 2021, [{ name: 'S1', year: 2021, episodes: 9, episodeMinutes: 40 }]),
+    series('wv', 'ВандаВижн', 2021, [{ name: 'S1', year: 2021, episodes: 9, episodeMinutes: 40, phase: 'Фаза 4' }]),
     
-    series('tfatws', 'Сокол и Зимний солдат', 2021, [{ name: 'S1', year: 2021, episodes: 6, episodeMinutes: 55 }]),
+    series('tfatws', 'Сокол и Зимний солдат', 2021, [{ name: 'S1', year: 2021, episodes: 6, episodeMinutes: 55, phase: 'Фаза 4' }]),
     
     series('loki', 'Локи', 2021, [
-        { name: 'S1', year: 2021, episodes: 6, episodeMinutes: 50 },
-        { name: 'S2', year: 2023, episodes: 6, episodeMinutes: 50 },
+        { name: 'S1', year: 2021, episodes: 6, episodeMinutes: 50, phase: 'Фаза 4' },
+        { name: 'S2', year: 2023, episodes: 6, episodeMinutes: 50, phase: 'Фаза 5' },
     ]),
     
-    series('hawk', 'Соколиный глаз', 2021, [{ name: 'S1', year: 2021, episodes: 6, episodeMinutes: 50 }]),
+    series('hawk', 'Соколиный глаз', 2021, [{ name: 'S1', year: 2021, episodes: 6, episodeMinutes: 50, phase: 'Фаза 4' }]),
     
-    series('mk', 'Лунный рыцарь', 2022, [{ name: 'S1', year: 2022, episodes: 6, episodeMinutes: 50 }]),
+    series('mk', 'Лунный рыцарь', 2022, [{ name: 'S1', year: 2022, episodes: 6, episodeMinutes: 50, phase: 'Фаза 4' }]),
     
-    series('msm', 'Мисс Марвел', 2022, [{ name: 'S1', year: 2022, episodes: 6, episodeMinutes: 45 }]),
+    series('msm', 'Мисс Марвел', 2022, [{ name: 'S1', year: 2022, episodes: 6, episodeMinutes: 45, phase: 'Фаза 4' }]),
     
-    series('sheh', 'Женщина-Халк', 2022, [{ name: 'S1', year: 2022, episodes: 9, episodeMinutes: 33 }]),
+    series('sheh', 'Женщина-Халк', 2022, [{ name: 'S1', year: 2022, episodes: 9, episodeMinutes: 33, phase: 'Фаза 4' }]),
     
-    series('si', 'Секретное вторжение', 2023, [{ name: 'S1', year: 2023, episodes: 6, episodeMinutes: 45 }]),
+    series('si', 'Секретное вторжение', 2023, [{ name: 'S1', year: 2023, episodes: 6, episodeMinutes: 45, phase: 'Фаза 5' }]),
     
-    series('agatha', 'Это всё Агата', 2024, [{ name: 'S1', year: 2024, episodes: 9, episodeMinutes: 40 }]),
+    series('agatha', 'Это всё Агата', 2024, [{ name: 'S1', year: 2024, episodes: 9, episodeMinutes: 40, phase: 'Фаза 5' }]),
     
-    series('echo', 'Эхо', 2024, [{ name: 'S1', year: 2024, episodes: 5, episodeMinutes: 40 }]),
+    series('echo', 'Эхо', 2024, [{ name: 'S1', year: 2024, episodes: 5, episodeMinutes: 40, phase: 'Фаза 5' }]),
     
     series('whatif', 'Что если..?', 2021, [
-        { name: 'S1', year: 2021, episodes: 9, episodeMinutes: 32 },
-        { name: 'S2', year: 2023, episodes: 9, episodeMinutes: 32 },
-        { name: 'S3', year: 2024, episodes: 8, episodeMinutes: 32 },
+        { name: 'S1', year: 2021, episodes: 9, episodeMinutes: 32, phase: 'Фаза 4' },
+        { name: 'S2', year: 2023, episodes: 9, episodeMinutes: 32, phase: 'Фаза 5' },
+        { name: 'S3', year: 2024, episodes: 8, episodeMinutes: 32, phase: 'Фаза 5' },
     ]),
 
-    series('ddba', 'Сорвиголова: Рождённый заново', 2025, [{ name: 'S1', year: 2025, episodes: 9, episodeMinutes: 50 }]),
+    series('ddba', 'Сорвиголова: Рождённый заново', 2025, [
+        { name: 'S1', year: 2025, episodes: 9, episodeMinutes: 60, phase: 'Фаза 5' },
+        { name: 'S2', year: 2026, episodes: 9, episodeMinutes: 60, phase: 'Фаза 6' },
+    ]),
     
-    series('ihrt', 'Железное сердце', 2025, [{ name: 'S1', year: 2025, episodes: 6, episodeMinutes: 48 }]),
+    series('ihrt', 'Железное сердце', 2025, [{ name: 'S1', year: 2025, episodes: 6, episodeMinutes: 48, phase: 'Фаза 5' }]),
     
-    series('wonderman', 'Чудо-человек', 2025, [{ name: 'S1', year: 2025, episodes: 8, episodeMinutes: 30 }]),
+    series('wonderman', 'Чудо-человек', 2025, [{ name: 'S1', year: 2025, episodes: 8, episodeMinutes: 30, phase: 'Фаза 6' }]),
     
-    series('vision', 'Вижн', 2026, [{ name: 'S1', year: 2026, episodes: 8, episodeMinutes: 50 }]),
+    series('vision', 'Вижн', 2026, [{ name: 'S1', year: 2026, episodes: 8, episodeMinutes: 50, phase: 'Фаза 6' }]),
 
     series('legion', 'Легион', 2017, [
         { name: 'S1', year: 2017, episodes: 8, episodeMinutes: 55 },
@@ -145,16 +208,11 @@ export const items = [
 
     series('helstrom', 'Хелстром', 2020, [{ name: 'S1', year: 2020, episodes: 10, episodeMinutes: 50 }]),
     
-    series('groot', 'Я есть Грут', 2022, [{ name: 'S1', year: 2022, episodes: 5, episodeMinutes: 4 }]),
+    series('groot', 'Я есть Грут', 2022, [
+        { name: 'S1', year: 2022, episodes: 5, episodeMinutes: 4 },
+        { name: 'S2', year: 2023, episodes: 5, episodeMinutes: 4 }
+    ]),
     
-    series('hulk-tv', 'Невероятный Халк (телесериал)', 1977, [
-        { name: 'S1', year: 1977, episodes: 10, episodeMinutes: 50 },
-        { name: 'S2', year: 1978, episodes: 22, episodeMinutes: 50 },
-        { name: 'S3', year: 1979, episodes: 23, episodeMinutes: 50 },
-        { name: 'S4', year: 1980, episodes: 18, episodeMinutes: 50 },
-        { name: 'S5', year: 1981, episodes: 7, episodeMinutes: 50 },
-    ], { earth: 'Земля 90619' }),
-
     /* ============ ФИЛЬМЫ ПО ФАЗАМ ============ */
     // Фаза 1
     movie('im1', 'Железный человек', 2008, 2.1, { phase: 'Фаза 1' }),
@@ -245,25 +303,19 @@ export const items = [
     movie('venom1', 'Веном', 2018, 1.9, { earth: 'Земля 688' }),
     movie('venom2', 'Веном 2', 2021, 1.9, { earth: 'Земля 688' }),
     movie('morbius', 'Морбиус', 2022, 1.8, { earth: 'Земля 688' }),
-    movie('madame', 'Мадам Паутина', 2024, 1.8, { earth: 'Земля 688' }),
+    // movie('madame', 'Мадам Паутина', 2024, 1.8, { earth: 'Земля 688' }),
     movie('venom3', 'Веном: Последний танец', 2024, 1.8, { earth: 'Земля 688' }),
     movie('kraven', 'Крэйвен-охотник', 2024, 2.0, { earth: 'Земля 688' }),
-
-    // Земля 1610 (Spider-Verse)
-    movie('spiderv1', 'Человек-паук: Через вселенные', 2018, 2.0, { earth: 'Земля 1610' }),
-    movie('spiderv2', 'Человек-паук: Паутина вселенных', 2023, 2.4, { earth: 'Земля 1610' }),
 
     // Земля 555326 (Каратель)
     movie('pun-2004', 'Каратель', 2004, 2.0, { earth: 'Земля 555326' }),
     movie('pun-2008', 'Каратель: Зона войны', 2008, 1.7, { earth: 'Земля 555326' }),
+    movie('pun-2026', 'Каратель: Последнее убийство', 2026, 0.8, { earth: 'Земля 555326' }),
 
     // Земля 746176 (Блэйд)
     movie('blade1', 'Блэйд', 1998, 2.0, { earth: 'Земля 746176' }),
     movie('blade2', 'Блэйд 2', 2002, 1.9, { earth: 'Земля 746176' }),
     movie('blade3', 'Блэйд: Троица', 2004, 1.9, { earth: 'Земля 746176' }),
-
-    // Земля 90619 (Халк Ли Андерссона)
-    movie('hulk-death', 'Смерть Невероятного Халка (телефильм)', 1990, 1.5, { earth: 'Земля 90619' }),
 
     // Прочее
     movie('werewolf', 'Ночной оборотень', 2022, 0.9),

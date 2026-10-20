@@ -21,15 +21,13 @@ export default function SeasonRow({ season, showName, onChange }) {
         />
       </div>
 
-      <span className="min-w-[60px] text-right text-[13px] text-[#98a0ad]">
-        {season.watched} / {season.episodes}
-      </span>
-
-      <EpisodeControls
-        current={season.watched}
-        total={season.episodes}
-        onChange={onChange}
-      />
+      <div className="flex items-center gap-3">
+        <EpisodeControls
+          current={season.watched}
+          total={season.episodes}
+          onChange={onChange}
+        />
+      </div>
     </div>
   )
 }

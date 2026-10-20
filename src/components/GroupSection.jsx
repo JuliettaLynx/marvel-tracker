@@ -43,17 +43,20 @@ export default function GroupSection({
 
       {!collapsed && (
         <ul className="mt-3 flex flex-col gap-2">
-          {group.list.map(item => (
-            <ItemRow
-              key={item.id}
-              item={item}
-              progress={progressOf(item, state[item.id])}
-              onToggle={() => onToggle(item)}
-              onSeasonEp={(seasonName, n) => onSeasonEp(item.id, seasonName, n, item)}
-              seasonsOpen={!!expandedSeasons[item.id]}
-              onToggleSeasons={() => onToggleSeasons(item.id)}
-            />
-          ))}
+          {group.list.map(item => {
+            const stateKey = item.parentSeriesId || item.id
+            return (
+              <ItemRow
+                key={item.id}
+                item={item}
+                progress={progressOf(item, state[stateKey])}
+                onToggle={() => onToggle(item)}
+                onSeasonEp={(seasonName, n) => onSeasonEp(stateKey, seasonName, n, item)}
+                seasonsOpen={!!expandedSeasons[item.id]}
+                onToggleSeasons={() => onToggleSeasons(item.id)}
+              />
+            )
+          })}
         </ul>
       )}
     </section>

@@ -17,6 +17,8 @@ export default function Controls({
         Группировка:
         <select className={SELECT} value={groupMode} onChange={e => setGroupMode(e.target.value)}>
           <option value="byGroup">По фазам и сериалам</option>
+          <option value="byPhase">По фазам</option>
+          <option value="seriesByPhase">Сериалы по фазам</option>
           <option value="none">Без группировки</option>
         </select>
       </label>
