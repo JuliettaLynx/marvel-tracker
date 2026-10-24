@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { items, GROUP_ORDER, PHASE_GROUP_ORDER, SEASON_PHASE_GROUP_ORDER, MAIN_PHASES, groupOf } from './data/marvelData'
+import { items, GROUP_ORDER, PHASE_GROUP_ORDER, MAIN_PHASES, groupOf } from './data/marvelData'
 import { progressOf } from './utils/progress'
 import { useProgress } from './hooks/useProgress'
 import { useLocalStorage } from './hooks/useLocalStorage'
@@ -107,14 +107,11 @@ export default function App() {
   const groups = useMemo(() => {
     let source = items
 
-    // Режимы с разбивкой сезонов
-    if (groupMode === 'byPhase' || groupMode === 'seriesByPhase') {
+    // Режим «По фазам» — сериалы разбиваются на сезоны
+    if (groupMode === 'byPhase') {
       let filtered = source.filter(i => {
-        if (groupMode === 'seriesByPhase' && i.type !== 'series') return false
-        if (groupMode === 'byPhase') {
-          if (typeFilter === 'movie' && i.type !== 'movie') return false
-          if (typeFilter === 'series' && i.type !== 'series') return false
-        }
+        if (typeFilter === 'movie' && i.type !== 'movie') return false
+        if (typeFilter === 'series' && i.type !== 'series') return false
         if (filter === 'prep') return i.isPrep
         // Для сериалов watched/unwatched фильтруется после разбивки на сезоны
         if (i.type === 'series') return true
@@ -154,10 +151,8 @@ export default function App() {
         map.get(k).push(it)
       }
 
-      const order = groupMode === 'seriesByPhase' ? SEASON_PHASE_GROUP_ORDER : PHASE_GROUP_ORDER
-
       const sortedKeys = [...map.keys()].sort((a, b) => {
-        const ia = order.indexOf(a), ib = order.indexOf(b)
+        const ia = PHASE_GROUP_ORDER.indexOf(a), ib = PHASE_GROUP_ORDER.indexOf(b)
         if (ia !== -1 && ib !== -1) return ia - ib
         if (ia !== -1) return -1
         if (ib !== -1) return 1
@@ -226,7 +221,7 @@ export default function App() {
   const groupKeys = groups.map(g => g.key)
 
   return (
-    <div className="mx-auto min-h-screen max-w-[1100px] px-4 pb-16 pt-6">
+    <div className="mx-auto min-h-screen max-w-6xl px-4 pb-16 pt-6">
       <header className="mb-5 flex items-center justify-between">
         <h1 className="m-0 text-2xl font-bold tracking-wide">Marvel Tracker</h1>
       </header>

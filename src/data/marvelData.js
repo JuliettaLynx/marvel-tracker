@@ -37,65 +37,11 @@ export const PHASE_GROUP_ORDER = [
     'Фильмы вне фаз', 'Сериалы вне фаз',
 ]
 
-export const SEASON_PHASE_GROUP_ORDER = [
-    'Фаза 1', 'Фаза 2', 'Фаза 3', 'Фаза 4',
-    'Фаза 5', 'Фаза 6',
-    'Сериалы вне фаз',
-]
-
 export const MAIN_PHASES = ['Фаза 1', 'Фаза 2', 'Фаза 3', 'Фаза 4', 'Фаза 5', 'Фаза 6']
-
-/** Фаза для каждого сезона сериала (ключ: `${seriesId}__${seasonName}`) */
-export const SEASON_PHASE = {
-    'dd__S1': 'Фаза 2',
-    'dd__S2': 'Фаза 3',
-    'dd__S3': 'Фаза 3',
-    'jj__S1': 'Фаза 2',
-    'jj__S2': 'Фаза 3',
-    'jj__S3': 'Фаза 3',
-    'lc__S1': 'Фаза 3',
-    'lc__S2': 'Фаза 3',
-    'if__S1': 'Фаза 3',
-    'if__S2': 'Фаза 3',
-    'def__S1': 'Фаза 3',
-    'pun__S1': 'Фаза 3',
-    'pun__S2': 'Фаза 3',
-    'wv__S1': 'Фаза 4',
-    'tfatws__S1': 'Фаза 4',
-    'loki__S1': 'Фаза 4',
-    'loki__S2': 'Фаза 5',
-    'whatif__S1': 'Фаза 4',
-    'whatif__S2': 'Фаза 5',
-    'whatif__S3': 'Фаза 5',
-    'hawk__S1': 'Фаза 4',
-    'mk__S1': 'Фаза 4',
-    'msm__S1': 'Фаза 4',
-    'sheh__S1': 'Фаза 4',
-    'groot__S1': 'Фаза 4',
-    'groot__S2': 'Фаза 5',
-    'si__S1': 'Фаза 5',
-    'echo__S1': 'Фаза 5',
-    'agatha__S1': 'Фаза 5',
-    'ddba__S1': 'Фаза 5',
-    'ddba__S2': 'Фаза 6',
-    'ihrt__S1': 'Фаза 5',
-    'wonderman__S1': 'Фаза 6',
-    'vision__S1': 'Фаза 6',
-}
 
 /** Определяет группу для элемента: сериал / фаза / вне фаз. */
 export function groupOf(item) {
     if (item.type === 'series') return 'Сериалы'
-    if (item.phase) return item.phase
-    return 'Фильмы вне фаз'
-}
-
-/** Определяет группу для элемента в режиме «По фазам» (с учётом сезона). */
-export function groupOfByPhase(item, seasonName) {
-    if (item.type === 'series') {
-        const key = `${item.id}__${seasonName}`
-        return SEASON_PHASE[key] || 'Сериалы вне фаз'
-    }
     if (item.phase) return item.phase
     return 'Фильмы вне фаз'
 }
