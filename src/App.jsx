@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { items, GROUP_ORDER, PHASE_GROUP_ORDER, MAIN_PHASES, groupOf, prepIds, ACTIVE_PREP } from './data/marvelData'
+import { items, GROUP_ORDER, PHASE_GROUP_ORDER, MAIN_PHASES, groupOf, prepIds, ACTIVE_PREP, PREP_SETS } from './data/marvelData'
 import { progressOf } from './utils/progress'
 import { useProgress } from './hooks/useProgress'
 import { useLocalStorage } from './hooks/useLocalStorage'
@@ -7,11 +7,10 @@ import { useCollapsed } from './hooks/useCollapsed'
 import SummaryCards from './components/SummaryCards'
 import Controls from './components/Controls'
 import GroupSection from './components/GroupSection'
+import PrepTabs from './components/PrepTabs'
 
 const EXPANDED_KEY = 'marvel-tracker-expanded'
-
-/* Набор подготовки по умолчанию (заменится выбором из карусели) */
-const prepSet = new Set(prepIds(ACTIVE_PREP))
+const PREP_KEY = 'marvel-tracker-prep'
 
 /** Разбивает сериал на виртуальные элементы по сезонам */
 function expandSeasons(item) {
@@ -48,6 +47,13 @@ export default function App() {
 
   const { collapsed, toggle, collapseAll, expandAll } = useCollapsed()
   const [expandedSeasons, setExpandedSeasons] = useLocalStorage(EXPANDED_KEY, {})
+  const [prepKey, setPrepKey] = useLocalStorage(PREP_KEY, ACTIVE_PREP)
+
+  const prepSet = useMemo(
+    () => new Set(prepIds(prepKey in PREP_SETS ? prepKey : ACTIVE_PREP)),
+    [prepKey]
+  )
+  const prepLabel = (PREP_SETS[prepKey] || PREP_SETS[ACTIVE_PREP]).label
 
   const toggleItem = (item) =>
     setState(s => {
@@ -104,7 +110,7 @@ export default function App() {
       prepItems, prepWatched, prepHours, prepHoursWatched,
       totalItems, totalWatched, totalHours, totalHoursWatched,
     }
-  }, [state])
+  }, [state, prepSet])
 
   /* --- groups --- */
   const groups = useMemo(() => {
@@ -219,7 +225,7 @@ export default function App() {
       collapsible: true,
       ...buildMeta(map.get(k).slice().sort(sorter)),
     }))
-  }, [state, groupMode, sortBy, filter, typeFilter])
+  }, [state, groupMode, sortBy, filter, typeFilter, prepSet])
 
   const groupKeys = groups.map(g => g.key)
 
@@ -229,13 +235,16 @@ export default function App() {
         <h1 className="m-0 text-2xl font-bold tracking-wide">Marvel Tracker</h1>
       </header>
 
-      <SummaryCards stats={stats} />
+      <PrepTabs active={prepKey} onChange={setPrepKey} />
+
+      <SummaryCards stats={stats} prepLabel={prepLabel} />
 
       <Controls
         groupMode={groupMode} setGroupMode={setGroupMode}
         sortBy={sortBy}       setSortBy={setSortBy}
         filter={filter}       setFilter={setFilter}
         typeFilter={typeFilter} setTypeFilter={setTypeFilter}
+        prepLabel={prepLabel}
         onCollapseAll={() => collapseAll(groupKeys)}
         onExpandAll={expandAll}
       />

@@ -9,6 +9,7 @@ export default function Controls({
   sortBy, setSortBy,
   filter, setFilter,
   typeFilter, setTypeFilter,
+  prepLabel,
   onCollapseAll, onExpandAll,
 }) {
   return (
@@ -43,7 +44,7 @@ export default function Controls({
         Фильтр:
         <select className={SELECT} value={filter} onChange={e => setFilter(e.target.value)}>
           <option value="all">Все</option>
-          <option value="prep">🎯 Только к «Судному дню»</option>
+          <option value="prep">🎯 Только к «{prepLabel}»</option>
           <option value="watched">Просмотренные</option>
           <option value="unwatched">Непросмотренные</option>
         </select>

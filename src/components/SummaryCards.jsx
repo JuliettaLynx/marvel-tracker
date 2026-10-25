@@ -1,9 +1,6 @@
 import SummaryCard from './SummaryCard'
-import { PREP_SETS, ACTIVE_PREP } from '../data/marvelData'
 
-const prepLabel = PREP_SETS[ACTIVE_PREP].label
-
-export default function SummaryCards({ stats }) {
+export default function SummaryCards({ stats, prepLabel }) {
   return (
     <section className="mb-6 grid gap-3.5 sm:grid-cols-2 lg:grid-cols-3">
       <SummaryCard
