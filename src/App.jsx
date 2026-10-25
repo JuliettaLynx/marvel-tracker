@@ -8,6 +8,7 @@ import SummaryCards from './components/SummaryCards'
 import Controls from './components/Controls'
 import GroupSection from './components/GroupSection'
 import PrepTabs from './components/PrepTabs'
+import ChecklistSection from './components/ChecklistSection'
 
 const EXPANDED_KEY = 'marvel-tracker-expanded'
 const PREP_KEY = 'marvel-tracker-prep'
@@ -268,6 +269,8 @@ export default function App() {
           <p className="py-10 text-center text-[#98a0ad]">Ничего не найдено.</p>
         ) : null}
       </main>
+
+      <ChecklistSection state={state} />
     </div>
   )
 }
