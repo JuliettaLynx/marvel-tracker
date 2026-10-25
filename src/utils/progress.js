@@ -45,8 +45,6 @@ export function progressOf(item, s) {
   }
 }
 
-export const fmt = (n, digits = 1) => Number(n).toFixed(digits)
-
 export function pluralRu(n, one, few, many) {
   const m10 = n % 10, m100 = n % 100
   if (m10 === 1 && m100 !== 11) return one

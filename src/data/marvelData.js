@@ -350,7 +350,7 @@ export const items = [
 /* ---------- Наборы «подготовка к …» ---------- */
 export const PREP_SETS = {
     doomsday: {
-        label: 'Мстители: Судный день',
+        label: 'Мстители: Судный день — Short',
         itemIds: [
             'xm1', 'xm2', 'ca1', 'av1',
             'iw', 'endg', 'loki',
@@ -389,10 +389,6 @@ export const PREP_SETS = {
             'dpool', 'agatha', 'ddba', 'cap4', 'thndrb', 'ff4',
             'wonderman', 'sm4',
         ],
-    },
-    secretWars: {
-        label: 'Мстители: Секретные войны',
-        itemIds: ['av5', 'sm3', 'sm4', 'ff4', 'dpool', 'thndrb', 'cap4', 'ds2', 'bp2'],
     },
 }
 
