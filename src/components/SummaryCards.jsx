@@ -18,7 +18,6 @@ export default function SummaryCards({ stats, prepLabel }) {
         hoursTotal={stats.prepHours}
         color="#f5a623"
         highlight
-        subPrefix="С учётом «Локи»:"
       />
       <SummaryCard
         title="Всего в трекере"

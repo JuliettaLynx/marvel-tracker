@@ -245,7 +245,6 @@ export default function App() {
         sortBy={sortBy}       setSortBy={setSortBy}
         filter={filter}       setFilter={setFilter}
         typeFilter={typeFilter} setTypeFilter={setTypeFilter}
-        prepLabel={prepLabel}
         onCollapseAll={() => collapseAll(groupKeys)}
         onExpandAll={expandAll}
       />

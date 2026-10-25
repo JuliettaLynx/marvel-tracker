@@ -2,7 +2,7 @@ import ProgressBar from './ProgressBar'
 
 export default function SummaryCard({
   title, value, max, hoursWatched, hoursTotal,
-  color = '#e62429', highlight = false, subPrefix,
+  color = '#e62429', highlight = false,
 }) {
   return (
     <div
@@ -20,7 +20,7 @@ export default function SummaryCard({
       </div>
       <ProgressBar value={hoursWatched} max={hoursTotal} color={color} />
       <div className="mt-2 text-[13px] text-[#98a0ad]">
-        {subPrefix ? `${subPrefix} ` : ''}⏱ {hoursWatched.toFixed(1)} /{' '}
+        ⏱ {hoursWatched.toFixed(1)} /{' '}
         {hoursTotal.toFixed(1)} ч
       </div>
     </div>

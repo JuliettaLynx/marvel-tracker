@@ -9,48 +9,49 @@ export default function Controls({
   sortBy, setSortBy,
   filter, setFilter,
   typeFilter, setTypeFilter,
-  prepLabel,
   onCollapseAll, onExpandAll,
 }) {
   return (
-    <section className="mb-6 flex flex-wrap items-center gap-3.5">
-      <label className={LABEL}>
-        Группировка:
-        <select className={SELECT} value={groupMode} onChange={e => setGroupMode(e.target.value)}>
-          <option value="byGroup">Классическая (сериалы отдельно)</option>
-          <option value="byPhase">По фазам (сериалы по сезонам)</option>
-          <option value="none">Просто список</option>
-        </select>
-      </label>
+    <section className="mb-6 flex flex-col gap-3">
+      <div className="flex flex-wrap items-center gap-3.5 min-[850px]:justify-between">
+        <label className={LABEL}>
+          Группировка:
+          <select className={SELECT} value={groupMode} onChange={e => setGroupMode(e.target.value)}>
+            <option value="byGroup">Классическая (сериалы отдельно)</option>
+            <option value="byPhase">По фазам (сериалы по сезонам)</option>
+            <option value="none">Просто список</option>
+          </select>
+        </label>
 
-      <label className={LABEL}>
-        Сортировка:
-        <select className={SELECT} value={sortBy} onChange={e => setSortBy(e.target.value)}>
-          <option value="year">По дате выхода</option>
-          <option value="title">По названию</option>
-        </select>
-      </label>
+        <label className={LABEL}>
+          Сортировка:
+          <select className={SELECT} value={sortBy} onChange={e => setSortBy(e.target.value)}>
+            <option value="year">По дате выхода</option>
+            <option value="title">По названию</option>
+          </select>
+        </label>
 
-      <label className={LABEL}>
-        Тип:
-        <select className={SELECT} value={typeFilter} onChange={e => setTypeFilter(e.target.value)}>
-          <option value="all">Все</option>
-          <option value="movie">🎬 Только фильмы</option>
-          <option value="series">📺 Только сериалы</option>
-        </select>
-      </label>
+        <label className={LABEL}>
+          Тип:
+          <select className={SELECT} value={typeFilter} onChange={e => setTypeFilter(e.target.value)}>
+            <option value="all">Все</option>
+            <option value="movie">Только фильмы</option>
+            <option value="series">Только сериалы</option>
+          </select>
+        </label>
 
-      <label className={LABEL}>
-        Фильтр:
-        <select className={SELECT} value={filter} onChange={e => setFilter(e.target.value)}>
-          <option value="all">Все</option>
-          <option value="prep">🎯 Только к «{prepLabel}»</option>
-          <option value="watched">Просмотренные</option>
-          <option value="unwatched">Непросмотренные</option>
-        </select>
-      </label>
+        <label className={LABEL}>
+          Фильтр:
+          <select className={SELECT} value={filter} onChange={e => setFilter(e.target.value)}>
+            <option value="all">Все</option>
+            <option value="prep">Для подготовки к 🎯</option>
+            <option value="watched">Просмотренные</option>
+            <option value="unwatched">Непросмотренные</option>
+          </select>
+        </label>
+      </div>
 
-      <div className="ml-auto flex gap-2">
+      <div className="flex gap-2">
         <button className={BTN} onClick={onCollapseAll} title="Свернуть все группы">⏶ Свернуть всё</button>
         <button className={BTN} onClick={onExpandAll} title="Развернуть все группы">⏷ Развернуть всё</button>
       </div>

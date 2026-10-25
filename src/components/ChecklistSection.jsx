@@ -127,7 +127,7 @@ export default function ChecklistSection({ state }) {
   const { collapsed, toggle } = useCollapsed('marvel-tracker-collapsed-checklists')
 
   return (
-    <section className="mt-8">
+    <section className="mt-12 border-t-2 border-[#262b35] pt-8">
       <h2 className="mb-1 text-xl font-bold">Чек-листы по персонажам</h2>
       <Masonry
         breakpointCols={{ default: 2, 768: 1 }}
