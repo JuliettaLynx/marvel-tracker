@@ -38,8 +38,8 @@ export function progressOf(item, s) {
     watched: !!s.watched,
     epsWatched: 0,
     epsTotal: 0,
-    hoursWatched: s.watched ? item.hours : 0,
-    hoursTotal: item.hours,
+    hoursWatched: s.watched ? (item.hours ?? 0) : 0,
+    hoursTotal: item.hours ?? 0,
     ratio: s.watched ? 1 : 0,
     seasonsProgress: [],
   }

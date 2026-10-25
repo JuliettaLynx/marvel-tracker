@@ -398,7 +398,5 @@ export const PREP_SETS = {
 
 export const ACTIVE_PREP = 'doomsdayBasics'
 
-const active = PREP_SETS[ACTIVE_PREP]
-for (const item of items) {
-    item.isPrep = active.itemIds.includes(item.id)
-}
+/** Idshники набора подготовки по ключу. */
+export const prepIds = key => PREP_SETS[key]?.itemIds || []

@@ -11,6 +11,7 @@ const TOGGLE_BTN =
 export default function ItemRow({
   item, progress, onToggle, onSeasonEp,
   seasonsOpen, onToggleSeasons,
+  isPrep,
 }) {
   const isSeries = item.type === 'series'
   const isSeason = !!item.parentSeriesId
@@ -49,7 +50,7 @@ export default function ItemRow({
           <span className="font-semibold">{title}</span>
           {yearLabel && <span className="text-[13px] text-[#98a0ad]">{yearLabel}</span>}
 
-          {item.isPrep && (
+          {isPrep && (
             <span className={`${BADGE} border-[#f5a623]/40 bg-[#f5a623]/10 text-[#f5a623]`}>
               🎯 Prep
             </span>
@@ -105,7 +106,7 @@ export default function ItemRow({
             </>
           ) : (
             <span>
-              {progress.watched ? '✅ Просмотрено' : 'Не просмотрено'} · ⏱ {item.hours} ч
+              {progress.watched ? '✅ Просмотрено' : 'Не просмотрено'} · ⏱ {item.hours != null ? `${item.hours} ч` : '— ч'}
             </span>
           )}
         </div>

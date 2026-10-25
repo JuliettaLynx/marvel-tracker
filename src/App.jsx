@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react'
-import { items, GROUP_ORDER, PHASE_GROUP_ORDER, MAIN_PHASES, groupOf } from './data/marvelData'
+import { items, GROUP_ORDER, PHASE_GROUP_ORDER, MAIN_PHASES, groupOf, prepIds, ACTIVE_PREP } from './data/marvelData'
 import { progressOf } from './utils/progress'
 import { useProgress } from './hooks/useProgress'
 import { useLocalStorage } from './hooks/useLocalStorage'
@@ -9,6 +9,9 @@ import Controls from './components/Controls'
 import GroupSection from './components/GroupSection'
 
 const EXPANDED_KEY = 'marvel-tracker-expanded'
+
+/* Набор подготовки по умолчанию (заменится выбором из карусели) */
+const prepSet = new Set(prepIds(ACTIVE_PREP))
 
 /** Разбивает сериал на виртуальные элементы по сезонам */
 function expandSeasons(item) {
@@ -82,7 +85,7 @@ export default function App() {
       (a, i) => a + progressOf(i, state[i.id]).hoursWatched, 0
     )
 
-    const prepItems = items.filter(i => i.isPrep)
+    const prepItems = items.filter(i => prepSet.has(i.id))
     const prepWatched = prepItems.filter(i => progressOf(i, state[i.id]).watched).length
     const prepHours = prepItems.reduce((a, i) => a + i.hours, 0)
     const prepHoursWatched = prepItems.reduce(
@@ -112,7 +115,7 @@ export default function App() {
       let filtered = source.filter(i => {
         if (typeFilter === 'movie' && i.type !== 'movie') return false
         if (typeFilter === 'series' && i.type !== 'series') return false
-        if (filter === 'prep') return i.isPrep
+        if (filter === 'prep') return prepSet.has(i.id)
         // Для сериалов watched/unwatched фильтруется после разбивки на сезоны
         if (i.type === 'series') return true
         if (filter === 'watched') return progressOf(i, state[i.id]).watched
@@ -170,7 +173,7 @@ export default function App() {
       if (typeFilter === 'movie' && i.type !== 'movie') return false
       if (typeFilter === 'series' && i.type !== 'series') return false
 
-      if (filter === 'prep') return i.isPrep
+      if (filter === 'prep') return prepSet.has(i.id)
       const p = progressOf(i, state[i.id])
       if (filter === 'watched') return p.watched
       if (filter === 'unwatched') return !p.watched
@@ -239,17 +242,18 @@ export default function App() {
 
       <main>
         {groups.map(g => (
-          <GroupSection
-            key={g.key}
-            group={g}
-            state={state}
-            onToggle={toggleItem}
-            onSeasonEp={setSeasonEp}
-            expandedSeasons={expandedSeasons}
-            onToggleSeasons={toggleSeasons}
-            collapsed={!!collapsed[g.key]}
-            onToggleCollapse={() => toggle(g.key)}
-          />
+            <GroupSection
+              key={g.key}
+              group={g}
+              state={state}
+              prepSet={prepSet}
+              onToggle={toggleItem}
+              onSeasonEp={setSeasonEp}
+              expandedSeasons={expandedSeasons}
+              onToggleSeasons={toggleSeasons}
+              collapsed={!!collapsed[g.key]}
+              onToggleCollapse={() => toggle(g.key)}
+            />
         ))}
         {groups.length === 0 || groups[0].list.length === 0 ? (
           <p className="py-10 text-center text-[#98a0ad]">Ничего не найдено.</p>

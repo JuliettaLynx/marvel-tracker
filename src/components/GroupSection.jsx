@@ -3,7 +3,7 @@ import ItemRow from './ItemRow'
 import { progressOf } from '../utils/progress'
 
 export default function GroupSection({
-  group, state,
+  group, state, prepSet,
   onToggle, onSeasonEp,
   expandedSeasons, onToggleSeasons,
   collapsed, onToggleCollapse,
@@ -54,6 +54,7 @@ export default function GroupSection({
                 onSeasonEp={(seasonName, n) => onSeasonEp(stateKey, seasonName, n, item)}
                 seasonsOpen={!!expandedSeasons[item.id]}
                 onToggleSeasons={() => onToggleSeasons(item.id)}
+                isPrep={prepSet.has(stateKey)}
               />
             )
           })}
